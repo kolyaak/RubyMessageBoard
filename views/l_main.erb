@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang=en>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <meta charset=utf-8>
+    <title>Message Board</title>
+  </head>
+  <body>
+    <div class="pageheader">
+      <h1>Message Board</h1>
+    </div>
+  
+    <div class="speech-bubble">
+      <form action="/new" id="newmessage">
+        <p class="nick"><input type="text" placeholder="Nickname" name="nickname"></p>
+        <p class="message"><textarea placeholder="Message" name="message" form="newmessage"></textarea></p>
+        <p class="submit"><button class="submit" type="submit" form="newmessage" value="Submit">I say this!</button></p>
+      </form>
+    </div>
+    
+    <%= yield %>
+
+  </body>
+</html>

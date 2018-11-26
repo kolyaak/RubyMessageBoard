@@ -1,0 +1,6 @@
+<% t_msg.each do |msg| %>
+  <div class="speech-bubble">
+    <p class="nick"><%= msg[:nick] %> says:</p>
+    <p class="message">&nbsp;&nbsp;&nbsp;"<%= msg[:msg] %>"</p>
+  </div>
+<% end %>
