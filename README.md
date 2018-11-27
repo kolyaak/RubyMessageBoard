@@ -1,2 +1,4 @@
 # RubyMessageBoard
-Ruby Message Board Example
+Message Board App example.
+Written in Ruby using Sinatra. Database is PostgreSQL.
+
