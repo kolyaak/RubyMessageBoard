@@ -12,7 +12,7 @@ get '/' do
   
   begin
       # connect to the database
-      conection = PG.connect :dbname => 'messageboard', :user => 'messageboarduser', :password => "'messageboarduser'"
+      conection = PG.connect :dbname => 'messageboard', :user => 'messageboarduser', :password => 'messageboarduser'
 
       # read data from the database
       t_messages = conection.exec 'SELECT * FROM messageboardmessages'
