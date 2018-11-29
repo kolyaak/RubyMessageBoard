@@ -14,8 +14,14 @@
       <h3>&copy; 2019 nlharri</h3>
     </div>
     
+    <% if val_error.to_s != "" %>
+    <div class="speech-bubble-error">
+      <p class="nick">Error: <%= val_error %></p>
+    </div>
+    <% end %>
+
     <div class="speech-bubble">
-      <form action="/new" id="newmessage">
+      <form method="POST" action="/newmessage" id="newmessage">
         <p class="nick"><input type="text" placeholder="Nickname" name="nickname"></p>
         <p class="message"><textarea placeholder="Message" name="message" form="newmessage"></textarea></p>
         <p class="submit"><button class="submit" type="submit" form="newmessage" value="Submit">I say this!</button></p>
