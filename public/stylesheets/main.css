@@ -4,6 +4,7 @@ adapted from:
 - https://alligator.io/css/styling-form-input-validity/
 */
 
+/* speech bubble */
 .speech-bubble {
 	position: relative;
 	background: #00868B;
@@ -42,6 +43,46 @@ div.speech-bubble {
   font-size: 18pt;
 }
 
+/* ---- error area */
+.speech-bubble-error {
+	position: relative;
+	background: #ff0000;
+	border-radius: .4em;
+  box-shadow: 0px 0px 18px #000000;
+}
+
+.speech-bubble-error:after {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 70%;
+	width: 0;
+	height: 0;
+	border: 28px solid transparent;
+	border-right-color: #ff0000;
+	border-left: 0;
+	border-bottom: 0;
+	margin-top: -14px;
+	margin-left: -28px;
+}
+
+div.speech-bubble-error {
+  max-width: 420px;
+  padding-top: 1px;
+  padding-right: 20px;
+  padding-bottom: 1px;
+  padding-left: 20px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  margin-right: 20px;
+  margin-left: 50px;
+  text-shadow: 0px 0px 10px #ffffff;
+  font-family: 'Nunito', sans-serif;
+  color: #FFFFFF;
+  font-size: 18pt;
+}
+
+/* others */
 input, textarea {
   margin: 0 .25rem;
   resize:vertical;
