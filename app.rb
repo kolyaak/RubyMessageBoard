@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'pg'
+require 'uuidtools'
 
 # Listen on all interfaces in the development environment
 # This is needed when we run from Cloud 9 environment
@@ -9,27 +10,84 @@ set :port, 8080
 
 get '/' do
   t_msg = []
-
+  
   begin
     # connect to the database
-    conection = PG.connect :dbname => 'messageboard', :user => 'messageboarduser', :password => 'messageboarduser'
+    connection = PG.connect :dbname => 'messageboard', :user => 'messageboarduser', :password => 'messageboarduser'
 
     # read data from the database
-    t_messages = conection.exec 'SELECT * FROM messageboardmessages'
+    t_messages = connection.exec 'SELECT * FROM messageboardmessages'
 
     # map data to t_msg, which is provided to the erb later
     t_messages.each do |s_message|
-      t_msg.push({ nick: s_message['nickname'], msg: s_message['message'] })
+      t_msg.unshift({ nick: s_message['nickname'], msg: s_message['message'], timestamp: s_message['timestamp'] })
     end
 
   rescue PG::Error => e
-    val_error = e.message 
+    val_error = e.message.to_s
 
   ensure
-    conection.close if conection
+    connection.close if connection
  
+  end
+
+  if params[:validationerror].to_s == "yes"
+  
+    val_error = "Nickname and message can contain only characters of the english alphabet, numbers and space.<br/>" + val_error.to_s
+    
+  end
+  
+  if params[:dberrormsg].to_s != ""
+  
+    val_error = params[:dberrormsg].to_s + "<br/>" + val_error.to_s
+    
   end
 
   # call erb, pass parameters to it 
   erb :v_message, :layout => :l_main, :locals => {:t_msg => t_msg, :val_error => val_error}
+
+end
+
+post '/newmessage' do
+
+  # validate input
+  val_input_regex = /^[a-zA-Z0-9 ]*$/
+  if ( ( params[:nickname] =~ val_input_regex ) and ( params[:message] =~ val_input_regex ) )
+
+    begin
+      # connect to the database
+      connection = PG.connect :dbname => 'messageboard', :user => 'messageboarduser', :password => 'messageboarduser'
+  
+      # generate new UUID
+      val_uuid = UUIDTools::UUID.random_create.to_s
+  
+      # insert data into the database
+      timestamp = Time.now
+      connection.exec "INSERT INTO messageboardmessages(message_id, nickname, message, timestamp) \
+                       VALUES ('#{val_uuid}', '#{params[:nickname]}', '#{params[:message]}', '#{timestamp}');"
+  
+    rescue PG::Error => e
+      val_error = e.message.to_s
+      params_for_redirect = {
+        :dberror => "yes",
+        :dberrormsg => val_error
+      }
+      query = params_for_redirect.map{|key, value| "#{key}=#{value}"}.join("&")
+
+    ensure
+      connection.close if connection
+   
+    end
+
+    redirect to("/?#{query}")
+
+  else
+    # pass the error as a parameter
+    params_for_redirect = {
+      :validationerror => "yes"
+    }
+    query = params_for_redirect.map{|key, value| "#{key}=#{value}"}.join("&")
+    redirect to("/?#{query}")
+  end
+
 end
