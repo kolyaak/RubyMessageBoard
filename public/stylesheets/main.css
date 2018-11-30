@@ -132,11 +132,20 @@ input, textarea {
   cursor: pointer;
 }
 
-
 .speech-bubble p.submit button.submit:active {
   box-shadow: 0px 0px 3px #fffcbb;
   cursor: pointer;
 }
+
+.speech-bubble p.submit button.submit:disabled {
+  box-shadow: 0px 0px 3px #ffffff;
+  cursor: wait;
+}
+
+.speech-bubble p.nick input:disabled, .speech-bubble p.message textarea:disabled {
+  cursor: wait;
+}
+
 
 div.pageheader {
   max-width: 500px;
