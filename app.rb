@@ -10,6 +10,7 @@ set :port, 8080
 
 get '/' do
   t_msg = []
+  t_val_error = []
   
   begin
     # connect to the database
@@ -24,7 +25,7 @@ get '/' do
     end
 
   rescue PG::Error => e
-    val_error = e.message.to_s
+    t_val_error.unshift(e.message.to_s)
 
   ensure
     connection.close if connection
@@ -33,18 +34,18 @@ get '/' do
 
   if params[:validationerror].to_s == "yes"
   
-    val_error = "Nickname and message can contain only characters of the english alphabet, numbers and space.<br/>" + val_error.to_s
+    t_val_error.unshift("Nickname and message should not be empty, and can contain only characters of the english alphabet, numbers and space.")
     
   end
   
   if params[:dberrormsg].to_s != ""
   
-    val_error = params[:dberrormsg].to_s + "<br/>" + val_error.to_s
+    t_val_error.unshift(params[:dberrormsg].to_s)
     
   end
 
   # call erb, pass parameters to it 
-  erb :v_message, :layout => :l_main, :locals => {:t_msg => t_msg, :val_error => val_error}
+  erb :v_message, :layout => :l_main, :locals => {:t_msg => t_msg, :t_val_error => t_val_error}
 
 end
 
@@ -52,7 +53,10 @@ post '/newmessage' do
 
   # validate input
   val_input_regex = /^[a-zA-Z0-9 ]*$/
-  if ( ( params[:nickname] =~ val_input_regex ) and ( params[:message] =~ val_input_regex ) )
+  if ( ( params[:nickname] != "" ) and 
+       ( params[:message]  != "" ) and 
+       ( params[:nickname] =~ val_input_regex ) and 
+       ( params[:message]  =~ val_input_regex ) )
 
     begin
       # connect to the database
