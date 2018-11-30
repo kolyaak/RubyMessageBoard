@@ -14,17 +14,17 @@
       <h3>&copy; 2019 nlharri</h3>
     </div>
     
-    <% if val_error.to_s != "" %>
+    <% t_val_error.each do |error_msg| %>
     <div class="speech-bubble-error">
-      <p class="nick">Error: <%= val_error %></p>
+      <p class="nick">Error: <%= error_msg %></p>
     </div>
     <% end %>
 
     <div class="speech-bubble">
       <form method="POST" action="/newmessage" id="newmessage">
-        <p class="nick"><input type="text" placeholder="Nickname" name="nickname"></p>
-        <p class="message"><textarea placeholder="Message" name="message" form="newmessage"></textarea></p>
-        <p class="submit"><button class="submit" type="submit" form="newmessage" value="Submit">I say this!</button></p>
+        <p class="nick"><input id="nick" type="text" placeholder="Nickname" name="nickname"></p>
+        <p class="message"><textarea id="message" placeholder="Message" name="message" form="newmessage"></textarea></p>
+        <p class="submit"><button id="button" class="submit" type="submit" form="newmessage" value="Submit">I say this!</button></p>
       </form>
     </div>
     
